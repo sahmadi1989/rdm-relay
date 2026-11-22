@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk.Web"><ItemGroup><ProjectReference Include="../RDM.Security/RDM.Security.csproj" /><ProjectReference Include="../RDM.Storage/RDM.Storage.csproj" /><ProjectReference Include="../RDM.Contracts/RDM.Contracts.csproj" /></ItemGroup></Project>

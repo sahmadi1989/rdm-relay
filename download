@@ -1,0 +1,9 @@
+.tools
+**/bin
+**/obj
+client
+server
+artifacts
+.git
+**/TestResults
+deploy/certs

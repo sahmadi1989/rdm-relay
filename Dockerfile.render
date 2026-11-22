@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+COPY global.json Directory.Build.props ./
+COPY src/RDM.Contracts/ src/RDM.Contracts/
+COPY src/RDM.Security/ src/RDM.Security/
+COPY src/RDM.Storage/ src/RDM.Storage/
+COPY src/RDM.ConnectionServer/ src/RDM.ConnectionServer/
+RUN dotnet publish src/RDM.ConnectionServer/RDM.ConnectionServer.csproj -c Release -o /out -p:UseAppHost=false
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+WORKDIR /app
+COPY --from=build /out .
+ENV ASPNETCORE_URLS=http://0.0.0.0:10000 RDM_DATABASE=/tmp/rdm/server.db ASPNETCORE_ENVIRONMENT=Production
+# Render terminates public HTTPS. Backend access must remain isolated behind its edge.
+EXPOSE 10000
+USER app
+ENTRYPOINT ["dotnet", "RDM.ConnectionServer.dll"]

@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: rdm-relay-test
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./deploy/Dockerfile.render
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: off
+    numInstances: 1
+    envVars:
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:10000
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: RDM_DATABASE
+        value: /tmp/rdm/server.db
+      # Explicit private ingress allowlist; confirm actual proxy addresses during deployment.
+      - key: RDM_TRUSTED_PROXY_NETWORKS
+        value: "10.0.0.0/8;172.16.0.0/12;192.168.0.0/16;127.0.0.1/32;::1/128"
